@@ -59,5 +59,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    api project(path: ':thirdfacebook')
+//    api project(path: ':thirdfacebook')
+    api 'com.github.fangkeweiyou1:thirdfacebook:1.0.0'
 }
