@@ -1,7 +1,3 @@
 <resources>
-    <string name="app_name">thirdfacebook</string>
 
-
-    <string name="facebook_app_id" translatable="false"></string> <!--不需要翻译-->
-    <string name="fb_login_protocol_scheme" translatable="false"></string> <!--不需要翻译-->
 </resources>
