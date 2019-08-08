@@ -22,14 +22,15 @@ import org.json.JSONObject;
  */
 public class ThridFacebookProxy {
     private static ThridFacebookProxy proxy;
+    private ThridFacebookCallBack callBack;
     private FragmentActivity activity;
     LoginButton facebook_loginthird;
     private CallbackManager callbackManager;
 
 
-    public static void onCreate(FragmentActivity activity, int button_id) {
+    public static void onCreate(FragmentActivity activity, int button_id, ThridFacebookCallBack callBack) {
         if (proxy == null) {
-            proxy = new ThridFacebookProxy(activity, button_id);
+            proxy = new ThridFacebookProxy(activity, button_id, callBack);
         }
     }
 
@@ -42,8 +43,9 @@ public class ThridFacebookProxy {
      * @param activity
      * @param button_id LoginButton的id
      */
-    public ThridFacebookProxy(FragmentActivity activity, int button_id) {
+    public ThridFacebookProxy(FragmentActivity activity, int button_id, ThridFacebookCallBack callBack) {
         this.activity = activity;
+        this.callBack = callBack;
         facebook_loginthird = activity.findViewById(button_id);
         init();
     }
@@ -86,21 +88,23 @@ public class ThridFacebookProxy {
                         if (response.getError() != null) {
                             System.out.println("----------->>>>>>>>-----------response.getError():" + response.getError().getErrorMessage());
                         } else {
-                            System.out.println("----------->>>>>>>>-----------object:" + object.toString());
-                            String email = object.optString("email");
-                            String userid = object.optString("id");
-                            String name = "";
-                            try {
-
-
-                                String first_name = object.optString("first_name");
-                                String last_name = object.optString("last_name");
-                                Profile currentProfile = Profile.getCurrentProfile();
-                                name = currentProfile.getName();
-                                System.out.println("----------->>>>>>>>-----------"
-                                        + "name  " + currentProfile.getName() + "  email  " + email + "  gender  " + object.optString("gender") + "  user_birthday  " + object.optString("birthday"));
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            if (callBack != null) {
+                                callBack.result(object);
+                            } else {
+                                System.out.println("----------->>>>>>>>-----------object:" + object.toString());
+                                String email = object.optString("email");
+                                String userid = object.optString("id");
+                                String name = "";
+                                try {
+                                    String first_name = object.optString("first_name");
+                                    String last_name = object.optString("last_name");
+                                    Profile currentProfile = Profile.getCurrentProfile();
+                                    name = currentProfile.getName();
+                                    System.out.println("----------->>>>>>>>-----------"
+                                            + "name  " + currentProfile.getName() + "  email  " + email + "  gender  " + object.optString("gender") + "  user_birthday  " + object.optString("birthday"));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                             LoginManager.getInstance().logOut();//拿到个人消息后,退出facebook登录
 //                            if (TextUtils.isEmpty(email)) {
