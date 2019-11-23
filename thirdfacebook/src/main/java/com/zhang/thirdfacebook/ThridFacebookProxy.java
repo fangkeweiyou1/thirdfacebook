@@ -2,7 +2,6 @@ package com.zhang.thirdfacebook;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -23,17 +22,12 @@ import org.json.JSONObject;
 public class ThridFacebookProxy {
     private static ThridFacebookProxy proxy;
     private ThridFacebookCallBack callBack;
-    private FragmentActivity activity;
     LoginButton facebook_loginthird;
     private CallbackManager callbackManager;
 
 
-    public static void onCreate(FragmentActivity activity, int button_id, ThridFacebookCallBack callBack) {
-        if (proxy == null) {
-            proxy = new ThridFacebookProxy(activity, button_id, callBack);
-        }
-        LoginManager.getInstance().logOut();//拿到个人消息后,退出facebook登录
-        proxy.init();
+    public static void onCreate(LoginButton facebook_loginthirdy, ThridFacebookCallBack callBack) {
+        proxy = new ThridFacebookProxy(facebook_loginthirdy, callBack);
     }
 
     public static void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -42,13 +36,12 @@ public class ThridFacebookProxy {
 
 
     /**
-     * @param activity
-     * @param button_id LoginButton的id
+     * @param facebook_loginthird LoginButton的id
      */
-    public ThridFacebookProxy(FragmentActivity activity, int button_id, ThridFacebookCallBack callBack) {
-        this.activity = activity;
+    public ThridFacebookProxy(LoginButton facebook_loginthird, ThridFacebookCallBack callBack) {
         this.callBack = callBack;
-        facebook_loginthird = activity.findViewById(button_id);
+        this.facebook_loginthird = facebook_loginthird;
+        init();
     }
 
     private void init() {
@@ -89,9 +82,10 @@ public class ThridFacebookProxy {
                         if (response.getError() != null) {
                             System.out.println("----------->>>>>>>>-----------response.getError():" + response.getError().getErrorMessage());
                         } else {
+                            Profile currentProfile = Profile.getCurrentProfile();
                             LoginManager.getInstance().logOut();//拿到个人消息后,退出facebook登录
                             if (callBack != null) {
-                                callBack.result(object);
+                                callBack.result(object, currentProfile);
                             } else {
                                 System.out.println("----------->>>>>>>>-----------object:" + object.toString());
                                 String email = object.optString("email");
@@ -100,7 +94,6 @@ public class ThridFacebookProxy {
                                 try {
                                     String first_name = object.optString("first_name");
                                     String last_name = object.optString("last_name");
-                                    Profile currentProfile = Profile.getCurrentProfile();
                                     name = currentProfile.getName();
                                     System.out.println("----------->>>>>>>>-----------"
                                             + "name  " + currentProfile.getName() + "  email  " + email + "  gender  " + object.optString("gender") + "  user_birthday  " + object.optString("birthday"));
