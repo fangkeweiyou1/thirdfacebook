@@ -32,6 +32,8 @@ public class ThridFacebookProxy {
         if (proxy == null) {
             proxy = new ThridFacebookProxy(activity, button_id, callBack);
         }
+        LoginManager.getInstance().logOut();//拿到个人消息后,退出facebook登录
+        proxy.init();
     }
 
     public static void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -47,7 +49,6 @@ public class ThridFacebookProxy {
         this.activity = activity;
         this.callBack = callBack;
         facebook_loginthird = activity.findViewById(button_id);
-        init();
     }
 
     private void init() {
