@@ -88,6 +88,7 @@ public class ThridFacebookProxy {
                         if (response.getError() != null) {
                             System.out.println("----------->>>>>>>>-----------response.getError():" + response.getError().getErrorMessage());
                         } else {
+                            LoginManager.getInstance().logOut();//拿到个人消息后,退出facebook登录
                             if (callBack != null) {
                                 callBack.result(object);
                             } else {
@@ -106,7 +107,6 @@ public class ThridFacebookProxy {
                                     e.printStackTrace();
                                 }
                             }
-                            LoginManager.getInstance().logOut();//拿到个人消息后,退出facebook登录
 //                            if (TextUtils.isEmpty(email)) {
 //                                new ThirdLoginFailDialog(mActivity).show();
 //                                return;
